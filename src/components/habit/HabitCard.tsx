@@ -17,10 +17,11 @@ export default function HabitCard({ habit, onEdit, onDelete, onComplete }: Habit
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   
   useEffect(() => {
-    setMounted(true);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setToday(new Date().toISOString().split('T')[0]);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    const frame = requestAnimationFrame(() => {
+      setMounted(true);
+      setToday(new Date().toISOString().split('T')[0]);
+    });
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   const slug = getHabitSlug(habit.name);
