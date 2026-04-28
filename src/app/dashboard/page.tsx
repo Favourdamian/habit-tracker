@@ -17,6 +17,7 @@ export default function DashboardPage() {
   const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     const currentSession = getSession();
     if (!currentSession) {
@@ -41,16 +42,16 @@ export default function DashboardPage() {
     if (editingHabit) {
       updatedAllHabits = allHabits.map(h => 
         h.id === editingHabit.id 
-          ? { ...h, name: habitData.name!, description: habitData.description! } 
+          ? { ...h, ...habitData } 
           : h
       );
     } else {
       const newHabit: Habit = {
-        id: Date.now().toString(),
+        id: Date.now().toString() + Math.random().toString(36).substring(2, 9),
         userId: session.userId,
         name: habitData.name!,
         description: habitData.description || '',
-        frequency: 'daily',
+        frequency: habitData.frequency || 'daily',
         createdAt: new Date().toISOString(),
         completions: []
       };
@@ -135,6 +136,7 @@ export default function DashboardPage() {
             <div className="mb-12 animate-fade-in">
               <div className="bg-card border border-card-border p-6 rounded-3xl shadow-xl">
                 <HabitForm
+                  key={editingHabit?.id || 'new'}
                   initialData={editingHabit || undefined}
                   onSave={handleSaveHabit}
                   onCancel={() => {

@@ -12,6 +12,7 @@ interface HabitFormProps {
 export default function HabitForm({ initialData, onSave, onCancel }: HabitFormProps) {
   const [name, setName] = useState<string>(initialData?.name || '');
   const [description, setDescription] = useState<string>(initialData?.description || '');
+  const [frequency, setFrequency] = useState<Habit['frequency']>(initialData?.frequency || 'daily');
   const [error, setError] = useState<string>('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -21,7 +22,7 @@ export default function HabitForm({ initialData, onSave, onCancel }: HabitFormPr
       setError(validation.error || 'Invalid name');
       return;
     }
-    onSave({ name: validation.value, description });
+    onSave({ name: validation.value, description, frequency });
   };
 
   return (
@@ -83,10 +84,13 @@ export default function HabitForm({ initialData, onSave, onCancel }: HabitFormPr
             <select
               id="habit-freq"
               data-testid="habit-frequency-select"
-              disabled
+              value={frequency}
+              onChange={(e) => setFrequency(e.target.value as Habit['frequency'])}
               className="w-full bg-background border border-card-border p-4 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all appearance-none font-medium"
             >
               <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
             </select>
             <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-muted">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,7 +98,7 @@ export default function HabitForm({ initialData, onSave, onCancel }: HabitFormPr
               </svg>
             </div>
           </div>
-          <p className="text-[10px] text-muted font-medium px-1 italic">Weekly/Monthly frequency coming soon in HabitFlow Pro.</p>
+          <p className="text-[10px] text-muted font-medium px-1 italic">Choose how often you want to track this ritual.</p>
         </div>
       </div>
 

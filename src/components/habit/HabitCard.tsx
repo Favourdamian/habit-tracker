@@ -17,7 +17,9 @@ export default function HabitCard({ habit, onEdit, onDelete, onComplete }: Habit
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setToday(new Date().toISOString().split('T')[0]);
   }, []);
 
@@ -31,7 +33,7 @@ export default function HabitCard({ habit, onEdit, onDelete, onComplete }: Habit
     );
   }
 
-  const streak = calculateCurrentStreak(habit.completions, today);
+  const streak = calculateCurrentStreak(habit.completions, habit.frequency, today);
   const isCompletedToday = habit.completions.includes(today);
 
   return (
@@ -52,8 +54,14 @@ export default function HabitCard({ habit, onEdit, onDelete, onComplete }: Habit
               </svg>
               <span data-testid={`habit-streak-${slug}`}>{streak}</span>
             </div>
-            <p className="text-[10px] text-muted font-bold uppercase mt-1 tracking-widest">Day Streak</p>
+            <p className="text-[10px] text-muted font-bold uppercase mt-1 tracking-widest">{habit.frequency} Streak</p>
           </div>
+        </div>
+        
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 bg-card-border/30 rounded-md text-muted border border-card-border/50">
+            {habit.frequency}
+          </span>
         </div>
         
         <div className="mt-auto pt-6 flex items-center justify-between gap-4">
